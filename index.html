@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>东京 8日 · 长冈花火 + 富士</title>
-<meta name="description" content="日本2人行：长冈花火 + 御茶水乐器 + 大黑PA + 箱根富士河口湖 · 8/2-8/9">
+<meta name="description" content="东京 + 长冈花火 + 箱根富士河口湖 · 8/2-8/9 · 2人行">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -25,7 +25,6 @@
   --tint-green:  #34c759;
   --tint-blue:   #007aff;
   --tint-purple: #af52de;
-  --tint-pink:   #ff2d55;
   --separator:  rgba(60, 60, 67, .12);
   --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
   --shadow-md:  0 4px 14px rgba(0,0,0,.08);
@@ -33,7 +32,6 @@
   --radius-sm:  8px;
   --radius-md:  12px;
   --radius-lg:  16px;
-  --radius-xl:  20px;
   --safe-top:    env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -44,49 +42,32 @@ body {
   background: var(--bg-secondary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.47059;
+  line-height: 1.47;
   letter-spacing: -0.022em;
 }
 a { color: var(--accent); text-decoration: none; }
 #map { width: 100%; height: 40vh; min-height: 280px; position: sticky; top: 0; z-index: 100; }
-.locate-btn {
-  width: 36px; height: 36px; border-radius: 8px;
-  background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
-  border: none; box-shadow: 0 1px 4px rgba(0,0,0,.18);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; cursor: pointer;
-}
+.locate-btn { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border: none; box-shadow: 0 1px 4px rgba(0,0,0,.18); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; }
 .locate-btn.active { color: #007aff; }
-.tabs {
-  display: flex; gap: 6px; padding: 12px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch;
-  background: rgba(255,255,255,.85); -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px); position: sticky; top: 40vh; z-index: 99;
-  border-bottom: .5px solid var(--separator); scrollbar-width: none;
-}
+.loc-pulse { width: 14px; height: 14px; border-radius: 50%; background: rgba(0,122,255,.25); animation: loc-pulse 1.6s ease-out infinite; }
+@keyframes loc-pulse { 0% { transform: scale(1); opacity: .55; } 100% { transform: scale(2.4); opacity: 0; } }
+.tabs { display: flex; gap: 6px; padding: 12px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; background: rgba(255,255,255,.85); backdrop-filter: saturate(180%) blur(20px); position: sticky; top: 40vh; z-index: 99; border-bottom: .5px solid var(--separator); scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
-.tab {
-  flex-shrink: 0; padding: 7px 16px; border-radius: 980px; border: none;
-  background: var(--bg-grouped); color: var(--text-secondary);
-  font-size: 14px; font-weight: 500; cursor: pointer; transition: all .25s ease;
-  white-space: nowrap; letter-spacing: -0.01em;
-}
+.tab { flex-shrink: 0; padding: 7px 16px; border-radius: 980px; border: none; background: var(--bg-grouped); color: var(--text-secondary); font-size: 14px; font-weight: 500; cursor: pointer; transition: all .25s; white-space: nowrap; }
 .tab:active { transform: scale(.96); }
 .tab.active { background: var(--accent); color: #fff; }
 .content { max-width: 680px; margin: 0 auto; padding: 16px 16px calc(24px + var(--safe-bottom)); }
 .hero { text-align: center; padding: 28px 20px 20px; }
-.hero h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
-.hero .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 6px; font-weight: 400; }
+.hero h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.025em; }
+.hero .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 6px; }
 .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .info-card { background: var(--bg-elevated); border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-sm); }
 .info-card .label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .02em; margin-bottom: 6px; }
 .info-card .value { font-size: 15px; font-weight: 600; line-height: 1.4; }
 .section-head { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .03em; padding: 20px 0 8px; }
 .day-head { padding: 20px 0 12px; }
-.day-head h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.day-head h2 { font-size: 22px; font-weight: 700; }
 .day-head p { font-size: 15px; color: var(--text-secondary); margin-top: 2px; }
-.route-bar { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.7; white-space: pre-line; }
-.route-bar strong { color: var(--text-primary); }
 .timeline { position: relative; padding-left: 24px; }
 .timeline::before { content: ''; position: absolute; left: 7px; top: 20px; bottom: 20px; width: 1.5px; background: var(--separator); }
 .tl-item { position: relative; margin-bottom: 10px; }
@@ -96,10 +77,10 @@ a { color: var(--accent); text-decoration: none; }
 .tl-dot.hotel   { background: var(--tint-orange); }
 .tl-dot.drink   { background: var(--tint-purple); }
 .tl-dot.transport { background: var(--text-tertiary); }
-.card { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-sm); transition: box-shadow .25s ease; cursor: pointer; }
+.card { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-sm); transition: box-shadow .25s; cursor: pointer; }
 .card:active { box-shadow: var(--shadow-md); }
-.card .time { font-size: 12px; font-weight: 600; color: var(--text-tertiary); letter-spacing: .01em; }
-.card .name { font-size: 17px; font-weight: 600; margin: 2px 0 4px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 6px; }
+.card .time { font-size: 12px; font-weight: 600; color: var(--text-tertiary); }
+.card .name { font-size: 17px; font-weight: 600; margin: 2px 0 4px; display: flex; align-items: center; gap: 6px; }
 .card .desc { font-size: 14px; color: var(--text-secondary); line-height: 1.45; }
 .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; }
 .badge.food   { background: rgba(255,59,48,.1);  color: var(--tint-red); }
@@ -111,39 +92,18 @@ a { color: var(--accent); text-decoration: none; }
 .pay.ok  { background: rgba(52,199,89,.1);  color: var(--tint-green); }
 .pay.idk { background: rgba(255,149,0,.1);  color: var(--tint-orange); }
 .links { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.btn {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 8px 14px; border-radius: var(--radius-sm);
-  font-size: 13px; font-weight: 600; border: none; cursor: pointer;
-  text-decoration: none !important; transition: filter .2s;
-}
+.btn { display: inline-flex; align-items: center; gap: 4px; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; border: none; cursor: pointer; text-decoration: none !important; transition: filter .2s; }
 .btn:active { filter: brightness(.9); }
 .btn.nav    { background: var(--accent); color: #fff; }
 .btn.xhs    { background: #ff2442; color: #fff; }
 .btn.dp     { background: #ffa700; color: #fff; }
 .btn.rsv    { background: var(--tint-green); color: #fff; }
-.as-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,.35); backdrop-filter: blur(2px);
-  display: flex; align-items: flex-end; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity .25s;
-}
+.as-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,.35); backdrop-filter: blur(2px); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
 .as-overlay.show { opacity: 1; pointer-events: auto; }
-.as-sheet {
-  width: 100%; max-width: 420px;
-  padding: 0 8px 34px;
-  transform: translateY(100%); transition: transform .3s cubic-bezier(.22,1,.36,1);
-}
+.as-sheet { width: 100%; max-width: 420px; padding: 0 8px 34px; transform: translateY(100%); transition: transform .3s cubic-bezier(.22,1,.36,1); }
 .as-overlay.show .as-sheet { transform: translateY(0); }
-.as-group {
-  background: rgba(255,255,255,.88); backdrop-filter: blur(20px);
-  border-radius: 14px; overflow: hidden; margin-bottom: 8px;
-}
-.as-group .as-item {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 16px; font-size: 18px; color: #007aff; font-weight: 500;
-  border: none; background: none; width: 100%; cursor: pointer;
-}
+.as-group { background: rgba(255,255,255,.88); backdrop-filter: blur(20px); border-radius: 14px; overflow: hidden; margin-bottom: 8px; }
+.as-group .as-item { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px; font-size: 18px; color: #007aff; font-weight: 500; border: none; background: none; width: 100%; cursor: pointer; }
 .as-group .as-item + .as-item { border-top: .5px solid rgba(0,0,0,.12); }
 .as-group .as-item:active { background: rgba(0,0,0,.06); }
 .as-cancel { font-weight: 600; }
@@ -169,225 +129,226 @@ a { color: var(--accent); text-decoration: none; }
 <div class="tabs" id="tabs"></div>
 <div class="content" id="content"></div>
 <script>
+const EXRATE = 23.9; // 1 CNY = 23.9 JPY
+function cny(jpy){ return Math.round(jpy/EXRATE); }
+
 const HOTEL = { name: 'FRESA INN 上野御徒町', lat: 35.7085, lng: 139.7740 };
+
 const DAYS = [
   { id: 0, label: '总览', color: '#0071e3', locations: [] },
   {
-    id: 1, label: 'D0 到达', date: '8/2 周日', title: '落地东京',
-    color: '#86868b',
+    id: 1, label: 'D0 到达', date: '8/2 周日', title: '落地东京', color: '#86868b',
     locations: [
-      { name: '羽田机场 T2', lat: 35.5520, lng: 139.7799, type: 'transport', time: '19:45',
-        desc: 'NH924 广州T3→东京羽田T2 · 14:15出发 19:45到达 · 经济舱 3650/人 · 托运2件x23kg', budget: '已购', gmap: 'Haneda+Airport+Terminal+2' },
-      { name: 'FRESA INN 上野御徒町', lat: 35.7085, lng: 139.7740, type: 'hotel', time: '21:00',
-        desc: '京急→品川→山手线→上野 · 35分 ¥580/29 · 入住6晚', budget: '9000/晚 450', gmap: 'Sotetsu+Fresa+Inn+Ueno' },
-      { name: '阿美横町宵夜', lat: 35.7100, lng: 139.7745, type: 'food', time: '21:30',
-        desc: '肉的大山炸肉饼 350 · 名代宇奈鳗鱼饭 800 · 一蘭拉面 980', budget: '1200/60', gmap: 'Ameyoko+Ueno' }
+      { name: '羽田机场 T2', lat: 35.5520, lng: 139.7799, type: 'transport', time: '19:45', desc: 'NH924 广州→羽田 · 14:15→19:45 · 经济舱 3,650/人 · 托运 2件x23kg', budget: '已购', gmap: 'Haneda Airport Terminal 2' },
+      { name: 'FRESA INN 上野御徒町', lat: 35.7085, lng: 139.7740, type: 'hotel', time: '21:00', desc: '京急→品川→山手线→上野 35分 ¥580', budget: '¥9,000/晚 ¥377', gmap: 'Sotetsu Fresa Inn Ueno Okachimachi' },
+      { name: '阿美横町宵夜', lat: 35.7100, lng: 139.7745, type: 'food', time: '21:30', desc: '肉的大山炸肉饼 ¥350 · 名代宇奈鳗鱼饭 ¥800 · 一蘭拉面 ¥980', budget: '¥1,200 ¥50', gmap: 'Ameyoko Ueno' }
     ]
   },
   {
-    id: 2, label: 'D1 花火', date: '8/3 周一', title: '长冈花火大会',
-    color: '#ff3b30',
+    id: 2, label: 'D1 花火', date: '8/3 周一', title: '长冈花火大会', color: '#ff3b30',
     locations: [
-      { name: '上野站出发', lat: 35.7138, lng: 139.7767, type: 'transport', time: '(MPV包车)',
-        desc: '拼车MPV往返 · 单程约3-4h · 回程可能凌晨', gmap: 'Ueno+Station' },
-      { name: '长冈花火大会会场', lat: 37.4440, lng: 138.8500, type: 'spot', time: '19:20',
-        desc: '日本三大花火 · 不死鸟烟火 · 19:20-21:10 · 2万发/晚 · 建议A会场(靠长冈站)', budget: '15000/750', gmap: 'Nagaoka+Fireworks' },
-      { name: 'MPV返回东京', lat: 35.7138, lng: 139.7767, type: 'transport', time: '凌晨',
-        desc: '拼车MPV返回 · 凌晨到达酒店 · 花火票走国内二手市场', gmap: 'Ueno+Station' }
+      { name: '上野出发', lat: 35.7138, lng: 139.7767, type: 'transport', time: '(MPV包车)', desc: '拼车MPV往返 · 单程约3-4h', gmap: 'Ueno Station' },
+      { name: '长冈花火会场', lat: 37.4440, lng: 138.8500, type: 'spot', time: '19:20', desc: '日本三大花火 · 不死鸟烟火 · 19:20-21:10 · A会场优先', budget: '门票二手 ¥15,000 ¥628', gmap: 'Nagaoka Fireworks Festival' },
+      { name: '返回东京', lat: 35.7085, lng: 139.7740, type: 'transport', time: '凌晨', desc: 'MPV返回 · 凌晨到酒店', gmap: 'Ueno Station' }
     ]
   },
   {
-    id: 3, label: 'D2 东线', date: '8/4 周二', title: '浅草 + 秋叶原 + 御茶水乐器',
-    color: '#007aff',
+    id: 3, label: 'D2 东线', date: '8/4 周二', title: '浅草 + 秋叶原 + 御茶水乐器', color: '#007aff',
     locations: [
-      { name: '浅草寺 · 雷门', lat: 35.7148, lng: 139.7967, type: 'spot', time: '08:45',
-        desc: '上野→浅草 银座线5分 2km 180 · 雷门大灯笼 · 仲见世通', gmap: 'Sensoji+Temple+Asakusa' },
-      { name: '秋叶原 电器街', lat: 35.7023, lng: 139.7745, type: 'spot', time: '10:30',
-        desc: '浅草→秋叶原 筑波快线5分 200 · Yodobashi · Radio会馆 · 动漫手办', gmap: 'Akihabara+Electric+Town' },
-      { name: '秋叶原午餐', lat: 35.7020, lng: 139.7730, type: 'food', time: '12:30',
-        desc: '咖喱/拉面', budget: '1200/60', gmap: 'Akihabara+lunch' },
-      { name: 'イシバシ楽器 御茶水本店', lat: 35.6981, lng: 139.7644, type: 'spot', time: '13:30',
-        desc: '日本最大中古吉他连锁 · Fender/Gibson/Martin · 秋叶原步行10分 800m', budget: '中古Fender 50000+/2500+', gmap: 'Ishibashi+Music+Ochanomizu' },
-      { name: '下倉楽器 御茶水本店', lat: 35.6978, lng: 139.7648, type: 'spot', time: '14:15',
-        desc: 'G7/Kanade/Psy 小众日产手工琴 · 效果器品种全 · 国内无渠道的这里找', budget: '小众日产 30000+/1500+', gmap: 'Shimokura+Gakki+Ochanomizu' },
-      { name: 'クロサワ楽器 御茶水店', lat: 35.6975, lng: 139.7652, type: 'spot', time: '15:00',
-        desc: 'Schecter日产线 · ESP · 效果器宝库 · Boss/Strymon/Eventide', budget: '效果器 3000+/150+', gmap: 'Kurosawa+Gakki+Ochanomizu' },
-      { name: 'Disk Union 御茶水', lat: 35.6970, lng: 139.7658, type: 'spot', time: '15:45',
-        desc: '日本最大独立唱片连锁 · CD/黑胶/乐队周边 · 试完琴顺路逛', gmap: 'Disk+Union+Ochanomizu' },
-      { name: '秋叶原夜 · Taito HEY', lat: 35.7005, lng: 139.7710, type: 'spot', time: '19:00',
-        desc: '格斗游戏圣地 · 街机氛围 · 营业到23:00 · 万世桥夜拍', gmap: 'Taito+HEY+Akihabara' },
-      { name: '晚餐', lat: 35.7020, lng: 139.7730, type: 'food', time: '18:00',
-        desc: '肉の万世 秋叶原本店 · 和牛汉堡/牛排 · 或山家炸猪排回上野吃', budget: '1800/90', gmap: 'Niku+Mansei+Akihabara' }
+      { name: '浅草寺 · 雷门', lat: 35.7148, lng: 139.7967, type: 'spot', time: '08:45', desc: '上野→浅草 银座线5分 ¥180 · 雷门大灯笼 · 仲见世通 · 浅草炸肉饼 ¥350', gmap: 'Sensoji Temple Asakusa' },
+      { name: '秋叶原 电器街', lat: 35.7023, lng: 139.7745, type: 'spot', time: '10:30', desc: '浅草→秋叶原 筑波快线5分 ¥200 · Yodobashi · Radio会馆 · Mandarake', gmap: 'Akihabara Electric Town' },
+      { name: '秋叶原午餐', lat: 35.7020, lng: 139.7730, type: 'food', time: '12:30', desc: '炸牛排壹贰参 石板现煎 ¥1,500 · 或肉の万世 和牛汉堡 ¥1,800', budget: '¥1,500 ¥63', gmap: 'Akihabara lunch' },
+      { name: 'イシバシ楽器 御茶水', lat: 35.6981, lng: 139.7644, type: 'spot', time: '13:30', desc: '日本最大中古吉他 · Fender/Gibson/Martin 中古', budget: '中古Fender ¥50,000+', gmap: 'Ishibashi Music Ochanomizu' },
+      { name: '下倉楽器 御茶水', lat: 35.6978, lng: 139.7648, type: 'spot', time: '14:15', desc: 'G7/Kanade/Psy 小众日产手工琴 · 效果器品种全', budget: '小众日产 ¥30,000+', gmap: 'Shimokura Gakki Ochanomizu' },
+      { name: 'クロサワ楽器 御茶水', lat: 35.6975, lng: 139.7652, type: 'spot', time: '15:00', desc: 'Schecter日产线 · ESP · 效果器宝库 · Boss/Strymon/Eventide', gmap: 'Kurosawa Gakki Ochanomizu' },
+      { name: 'Disk Union 御茶水', lat: 35.6970, lng: 139.7658, type: 'spot', time: '15:45', desc: '日本最大独立唱片连锁 · CD/黑胶/乐队周边', gmap: 'Disk Union Ochanomizu' },
+      { name: '秋叶原夜 · Taito HEY', lat: 35.7005, lng: 139.7710, type: 'spot', time: '19:00', desc: '格斗游戏圣地 · 街机 · 营业到23:00', gmap: 'Taito HEY Akihabara' }
     ]
   },
   {
-    id: 4, label: 'D3 上野', date: '8/5 周三', title: '上野深度 + 大黑PA',
-    color: '#ff9500',
+    id: 4, label: 'D3 上野', date: '8/5 周三', title: '上野深度 + 根室花丸 + 大黑PA', color: '#ff9500',
     locations: [
-      { name: '国立博物馆', lat: 35.7190, lng: 139.7760, type: 'spot', time: '09:10',
-        desc: '本馆(文物主线)+平成馆(考古)+法隆寺宝物馆 · 酒店步行10分', budget: '1000/50', gmap: 'Tokyo+National+Museum' },
-      { name: '上野东照宫', lat: 35.7147, lng: 139.7712, type: 'spot', time: '12:00',
-        desc: '金色社殿 · 德川家康灵庙 · 200盏石灯笼参道', budget: '500/25', gmap: 'Ueno+Toshogu+Shrine' },
-      { name: '不忍池 + 弁天堂', lat: 35.7125, lng: 139.7705, type: 'spot', time: '12:50',
-        desc: '8月荷花全盛 · 池中朱红佛堂 · 步行5分', gmap: 'Shinobazu+Pond+Ueno' },
-      { name: '午餐', lat: 35.7090, lng: 139.7750, type: 'food', time: '13:15',
-        desc: '上野站周边', budget: '1200/60', gmap: 'Ueno+lunch' },
-      { name: '谷中银座', lat: 35.7260, lng: 139.7670, type: 'spot', time: '14:30',
-        desc: '东京最完整昭和商店街 · 猫主题店铺 · 夕阳台阶 · 步行15分', gmap: 'Yanaka+Ginza+Tokyo' },
-      { name: '根津神社', lat: 35.7200, lng: 139.7605, type: 'spot', time: '15:30',
-        desc: '东京十社之一 · 小型千本鸟居隧道 · 游客极少', gmap: 'Nezu+Shrine+Tokyo' },
-      { name: '晚餐', lat: 35.7090, lng: 139.7750, type: 'food', time: '18:00',
-        desc: '一頭や 烧肉(黑毛和牛) 3000/150 · 或山家炸猪排 1200/60', budget: '3000/150', gmap: 'Ueno+yakiniku' },
-      { name: '大黑PA', lat: 35.4630, lng: 139.6750, type: 'spot', time: '21:00',
-        desc: '东京湾湾岸线 · JDM圣地 · 包车从东京出发 · 港湾夜景+聚车 · 周二规模小但够看', gmap: 'Daikoku+Parking+Area' }
+      { name: '根室花丸 KITTE丸の内', lat: 35.6798, lng: 139.7650, type: 'food', time: '10:45', desc: '上野→东京站 山手线5分 · 北海道直送回转寿司 · KITTE 8F · 取号后逛街等位', budget: '¥2,500 ¥105', gmap: 'Nemuro Hanamaru KITTE Marunouchi' },
+      { name: '国立博物馆', lat: 35.7190, lng: 139.7760, type: 'spot', time: '13:30', desc: '本馆+平成馆+法隆寺宝物馆 · 3.5h够主线', budget: '¥1,000 ¥42', gmap: 'Tokyo National Museum' },
+      { name: '上野东照宫', lat: 35.7147, lng: 139.7712, type: 'spot', time: '15:30', desc: '金色社殿 · 德川家康灵庙 · 200盏石灯笼', budget: '¥500 ¥21', gmap: 'Ueno Toshogu Shrine' },
+      { name: '不忍池 + 弁天堂', lat: 35.7125, lng: 139.7705, type: 'spot', time: '16:00', desc: '8月荷花全盛 · 池中朱红佛堂', gmap: 'Shinobazu Pond Ueno' },
+      { name: '谷中银座', lat: 35.7260, lng: 139.7670, type: 'spot', time: '16:30', desc: '昭和商店街 · 猫主题 · ひみつ堂刨冰 ¥1,200', gmap: 'Yanaka Ginza Tokyo' },
+      { name: '根津神社', lat: 35.7200, lng: 139.7605, type: 'spot', time: '17:30', desc: '东京十社 · 小型千本鸟居隧道', gmap: 'Nezu Shrine Tokyo' },
+      { name: '晚餐 · 一頭や 烧肉', lat: 35.7090, lng: 139.7750, type: 'food', time: '18:30', desc: '黑毛和牛烧肉 · 上野站旁', budget: '¥3,000 ¥126', gmap: 'Ittouya Yakiniku Ueno' },
+      { name: '大黑PA', lat: 35.4630, lng: 139.6750, type: 'spot', time: '20:00', desc: '湾岸线JDM圣地 · 包车前往 · 港湾夜景+聚车', budget: '包车 ¥10,000 ¥419', gmap: 'Daikoku Parking Area' }
     ]
   },
   {
-    id: 5, label: 'D4 西线', date: '8/6 周四', title: '下北泽 + 涩谷 + 代官山 + 歌舞伎町',
-    color: '#34c759',
+    id: 5, label: 'D4 西线', date: '8/6 周四', title: '下北泽 + 涩谷 + 代官山 + Ushigoro + 歌舞伎町', color: '#34c759',
     locations: [
-      { name: '下北泽', lat: 35.6615, lng: 139.6670, type: 'spot', time: '09:45',
-        desc: '上野→下北泽 山手线→井之头线 40分 380 · 古着·唱片·独立书店 · Bonus Track集装箱小店', gmap: 'Shimokitazawa+Tokyo' },
-      { name: 'Disk Union 下北泽', lat: 35.6610, lng: 139.6665, type: 'spot', time: '10:00',
-        desc: '比御茶水店更大 · CD/黑胶/乐队T恤', gmap: 'Disk+Union+Shimokitazawa' },
-      { name: '下北泽午餐', lat: 35.6615, lng: 139.6675, type: 'food', time: '12:00',
-        desc: '独立咖啡馆/咖喱/拉面 · 整个街区随便找一家都好', budget: '1200/60', gmap: 'Shimokitazawa+lunch' },
-      { name: '涩谷 Scramble', lat: 35.6595, lng: 139.7004, type: 'spot', time: '13:10',
-        desc: '下北泽→涩谷 京王线5分 140 · 十字路口·109·中心街 · 不限时', gmap: 'Shibuya+Scramble' },
-      { name: '蔦屋书店 代官山', lat: 35.6485, lng: 139.7032, type: 'spot', time: '16:20',
-        desc: '涩谷步行15分 · 全球最美书店之一 · 三栋楼 · 2号馆音乐区 · 星巴克在里面', gmap: 'Tsutaya+Daikanyama' },
-      { name: '涩谷晚餐', lat: 35.6590, lng: 139.7010, type: 'food', time: '18:20',
-        desc: '代官山步行回涩谷15分', budget: '1500/75', gmap: 'Shibuya+dinner' },
-      { name: '歌舞伎町', lat: 35.6938, lng: 139.7034, type: 'spot', time: '19:40',
-        desc: '涩谷→新宿 山手线5分 · 哥斯拉头·霓虹招牌·歌舞伎町一番街牌坊', gmap: 'Kabukicho+Shinjuku' },
-      { name: '黄金街', lat: 35.6938, lng: 139.7048, type: 'drink', time: '21:00',
-        desc: '歌舞伎町步行3分 · 200+微型酒吧 · 每家只坐6-8人 · 大部分只收现金', budget: '1500/75', gmap: 'Golden+Gai+Shinjuku' }
+      { name: '下北泽', lat: 35.6615, lng: 139.6670, type: 'spot', time: '09:45', desc: '上野→下北泽 40分 ¥380 · 古着·唱片·独立书店 · Bonus Track', gmap: 'Shimokitazawa Tokyo' },
+      { name: '下北泽午餐', lat: 35.6615, lng: 139.6675, type: 'food', time: '12:00', desc: 'Rojiura Curry SAMURAI 汤咖喱 ¥1,500 · Magic Spice 香料咖喱 ¥1,300', budget: '¥1,500 ¥63', gmap: 'Shimokitazawa curry' },
+      { name: '涩谷 Scramble', lat: 35.6595, lng: 139.7004, type: 'spot', time: '13:10', desc: '下北泽→涩谷 京王线5分 · 十字路口·109·中心街 · PARCO 6F 任天堂', gmap: 'Shibuya Scramble Crossing' },
+      { name: '蔦屋书店 代官山', lat: 35.6485, lng: 139.7032, type: 'spot', time: '16:20', desc: '涩谷步行15分 · 全球最美书店 · 2号馆音乐区', gmap: 'Tsutaya Daikanyama' },
+      { name: 'Ushigoro 新宿三丁目', lat: 35.6910, lng: 139.7050, type: 'food', time: '17:30', desc: '代官山→新宿 副都心线10分 · A5黑毛和牛 · TableCheck预约必须', budget: '¥12,400 ¥519', gmap: 'Ushigoro Shinjuku Sanchome' },
+      { name: '歌舞伎町', lat: 35.6938, lng: 139.7034, type: 'spot', time: '19:00', desc: 'Ushigoro步行5分 · 哥斯拉头·霓虹招牌', gmap: 'Kabukicho Shinjuku' },
+      { name: '黄金街', lat: 35.6938, lng: 139.7048, type: 'drink', time: '21:00', desc: '200+微型酒吧 · 每家只坐6-8人 · 只收现金', budget: '¥1,500 ¥63', gmap: 'Golden Gai Shinjuku' }
     ]
   },
   {
-    id: 6, label: 'D5 箱根', date: '8/7 周五', title: '箱根 → 河口湖',
-    color: '#af52de',
+    id: 6, label: 'D5 箱根', date: '8/7 周五', title: '箱根 → 河口湖（住一晚）', color: '#af52de',
     locations: [
-      { name: '上野→小田原', lat: 35.2333, lng: 139.1017, type: 'transport', time: '07:00',
-        desc: '新干线35分 3540 · 购箱根周游券', budget: '周游券 6100/305', gmap: 'Hakone+Yumoto+Station' },
-      { name: '大涌谷', lat: 35.2423, lng: 139.0204, type: 'spot', time: '08:50',
-        desc: '火山喷烟 · 黑鸡蛋 · 富士远眺 · 登山电车+缆车到达', budget: '黑鸡蛋 500/25', gmap: 'Owakudani+Hakone' },
-      { name: '芦之湖 + 海盗船', lat: 35.2050, lng: 138.9880, type: 'spot', time: '09:50',
-        desc: '缆车→桃园台→海盗船30分→箱根町港 · 湖上观富士', gmap: 'Lake+Ashi+Hakone' },
-      { name: '箱根神社 水上鸟居', lat: 35.2058, lng: 139.0250, type: 'spot', time: '10:50',
-        desc: '芦之湖畔红色鸟居 · 排队拍照20-30分', gmap: 'Hakone+Shrine+Torii' },
-      { name: '箱根午餐', lat: 35.2055, lng: 139.0260, type: 'food', time: '11:30',
-        desc: '箱根町港周边', budget: '2000/100', gmap: 'Hakone+lunch' },
-      { name: '箱根→御殿场→河口湖', lat: 35.5000, lng: 138.7700, type: 'transport', time: '13:10',
-        desc: '小田原→御殿场 JR35分 510 · 御殿场→河口湖 富士急巴士80分 1540', gmap: 'Kawaguchiko+Station' },
-      { name: '河口湖缆车', lat: 35.5010, lng: 138.7720, type: 'spot', time: '16:00',
-        desc: 'Kachi Kachi缆车 · 山顶展望台 · 富士全景', budget: '900/45', gmap: 'Kawaguchiko+Ropeway' },
-      { name: '河口湖民宿', lat: 35.5050, lng: 138.7690, type: 'hotel', time: '18:30',
-        desc: '河口湖畔 · 一晚 · 第二天清晨5:30起床看逆富士', budget: '12000/600', gmap: 'Kawaguchiko+hotel' }
+      { name: '上野→小田原', lat: 35.2560, lng: 139.1550, type: 'transport', time: '07:00', desc: '新干线35分 ¥3,540 · 购箱根周游券 ¥6,100', budget: '¥9,640 ¥404', gmap: 'Odawara Station' },
+      { name: '大涌谷', lat: 35.2423, lng: 139.0204, type: 'spot', time: '08:50', desc: '火山喷烟 · 黑鸡蛋 ¥500 · 登山电车+缆车', gmap: 'Owakudani Hakone' },
+      { name: '芦之湖 + 海盗船', lat: 35.2050, lng: 138.9880, type: 'spot', time: '09:50', desc: '湖上观富士 · 缆车→海盗船30分', gmap: 'Lake Ashi Hakone' },
+      { name: '箱根神社 水上鸟居', lat: 35.2058, lng: 139.0250, type: 'spot', time: '10:50', desc: '芦之湖畔红色鸟居 · 排队拍照20-30分', gmap: 'Hakone Shrine Torii' },
+      { name: '箱根午餐', lat: 35.2055, lng: 139.0260, type: 'food', time: '11:30', desc: '箱根町港周边', budget: '¥2,000 ¥84', gmap: 'Hakone lunch' },
+      { name: '箱根→河口湖', lat: 35.5000, lng: 138.7700, type: 'transport', time: '13:10', desc: '小田原→御殿场 JR35分 · 御殿场→河口湖 巴士80分', budget: '¥2,050 ¥86', gmap: 'Kawaguchiko Station' },
+      { name: '河口湖缆车', lat: 35.5010, lng: 138.7720, type: 'spot', time: '16:00', desc: '山顶展望台 · 富士全景', budget: '¥900 ¥38', gmap: 'Kawaguchiko Ropeway' },
+      { name: '河口湖民宿', lat: 35.5050, lng: 138.7690, type: 'hotel', time: '18:30', desc: '湖畔民宿一晚 · 次日 5:45 起床看逆富士', budget: '¥12,000 ¥502', gmap: 'Kawaguchiko minshuku' }
     ]
   },
   {
-    id: 7, label: 'D6 富士', date: '8/8 周六', title: '富士晨景 + 台场 + SKY + 东京塔',
-    color: '#5ac8fa',
+    id: 7, label: 'D6 富士', date: '8/8 周六', title: '富士晨景 + 台场高达 + 取琴 + SKY + 东京塔', color: '#5ac8fa',
     locations: [
-      { name: '河口湖北岸 · 逆富士', lat: 35.5100, lng: 138.7650, type: 'spot', time: '05:45',
-        desc: '清晨湖面如镜 · 富士倒影 · 夏季100%能看到 · 全天最佳时段', gmap: 'Kawaguchiko+North+Shore' },
-      { name: '新仓山浅间公园', lat: 35.5020, lng: 138.8010, type: 'spot', time: '08:20',
-        desc: '河口湖→下吉田 富士急行15分 310 · 忠灵塔+富士山 · 日本最标志画面 · 爬台阶10分', gmap: 'Arakurayama+Sengen+Park' },
-      { name: '河口湖→新宿', lat: 35.6910, lng: 139.7000, type: 'transport', time: '10:30',
-        desc: '高速巴士2h 2000 · 到新宿→回上野放行李', gmap: 'Shinjuku+Station' },
-      { name: 'DiverCity 台场', lat: 35.6259, lng: 139.7750, type: 'spot', time: '14:20',
-        desc: '上野→台场 银座线→百合海鸥 40分 520 · 1:1独角兽高达 · 整点变形表演', gmap: 'DiverCity+Tokyo+Odaiba' },
-      { name: '木场站 取Bass', lat: 35.6693, lng: 139.8065, type: 'spot', time: '17:00',
-        desc: '台场→木场 百合海鸥→东西线 20分 320 · 江东区 · 取朋友的bass然后回酒店放', gmap: 'Kiba+Station+Tokyo' },
-      { name: 'SHIBUYA SKY', lat: 35.6581, lng: 139.7016, type: 'spot', time: '19:00',
-        desc: '上野→涩谷 山手线 210 · 提前网上订票！· 夜景展望台', budget: '2200/110', gmap: 'Shibuya+Sky' },
-      { name: '东京塔 夜景', lat: 35.6586, lng: 139.7454, type: 'spot', time: '21:00',
-        desc: '涩谷→赤羽桥 210 · Main Deck · 最后入场23:00', budget: '1200/60', gmap: 'Tokyo+Tower' }
+      { name: '河口湖北岸 · 逆富士', lat: 35.5100, lng: 138.7650, type: 'spot', time: '05:45', desc: '清晨湖面如镜 · 富士倒影 · 夏季100%能看到', gmap: 'Kawaguchiko North Shore' },
+      { name: '新仓山浅间公园', lat: 35.5020, lng: 138.8010, type: 'spot', time: '08:20', desc: '河口湖→下吉田 富士急行15分 · 忠灵塔+富士山', budget: '¥310 ¥13', gmap: 'Arakurayama Sengen Park' },
+      { name: '河口湖→新宿', lat: 35.6910, lng: 139.7000, type: 'transport', time: '10:30', desc: '高速巴士2h ¥2,000 · 回上野放行李', budget: '¥2,000 ¥84', gmap: 'Shinjuku Expressway Bus Terminal' },
+      { name: 'DiverCity 台场', lat: 35.6259, lng: 139.7750, type: 'spot', time: '14:20', desc: '1:1独角兽高达 · 整点变形表演 · Gundam Base台场限定', gmap: 'DiverCity Tokyo Odaiba' },
+      { name: '木场站 取Bass', lat: 35.6693, lng: 139.8065, type: 'spot', time: '17:00', desc: '台场→木场 百合海鸥→东西线20分 · 江东区 · 回酒店放琴', gmap: 'Kiba Station Tokyo' },
+      { name: 'SHIBUYA SKY', lat: 35.6581, lng: 139.7016, type: 'spot', time: '19:00', desc: '夜景展望台 · 提前网上订票', budget: '¥2,200 ¥92', gmap: 'Shibuya Sky' },
+      { name: '东京塔 夜景', lat: 35.6586, lng: 139.7454, type: 'spot', time: '21:00', desc: '涩谷→赤羽桥 · Main Deck · 最后入场23:00', budget: '¥1,200 ¥50', gmap: 'Tokyo Tower' }
     ]
   },
   {
-    id: 8, label: 'D7 返程', date: '8/9 周日', title: '返程',
-    color: '#86868b',
+    id: 8, label: 'D7 返程', date: '8/9 周日', title: '返程', color: '#86868b',
     locations: [
-      { name: '羽田机场 T2', lat: 35.5520, lng: 139.7799, type: 'transport', time: '09:15',
-        desc: 'NH923 东京羽田→广州白云 · 06:00起床 · 06:30出发 · Bass超大行李托运 · 提前确认ANA', budget: '已购 · 2件x23kg', gmap: 'Haneda+Airport+Terminal+2' }
+      { name: '羽田机场 T2', lat: 35.5520, lng: 139.7799, type: 'transport', time: '09:15', desc: 'NH923 羽田→广州 · 06:00起床 · Bass超大行李托运 · 提前确认ANA', budget: '已购', gmap: 'Haneda Airport Terminal 2' }
     ]
   }
 ];
+
 function overviewContent() {
-  return `
-<div class="hero"><h1>东京 8日 · 花火 + 富士</h1><p class="subtitle">8/2 - 8/9 · 2人行 · 花火 · 乐器 · JDM · 富士</p></div>
-<div class="info-grid">
-  <div class="info-card"><div class="label">酒店</div><div class="value">FRESA INN<br>上野御徒町<br><span style="font-size:12px;color:var(--text-secondary)">9000/晚 450 · 6晚+河口湖1晚</span></div></div>
-  <div class="info-card"><div class="label">航班</div><div class="value">NH924 CAN→HND<br>8/2 14:15→19:45<br>NH923 HND→CAN<br>8/9 09:15→13:05<br><span style="font-size:11px">经济舱 3650/人</span></div></div>
-  <div class="info-card"><div class="label">行李</div><div class="value">2件 x 23kg/人<br>Bass托运空间充裕<br><span style="font-size:11px">超大行李提前确认</span></div></div>
-  <div class="info-card"><div class="label">预估/人</div><div class="value">约 130,000<br>≈ 6,500<br><span style="font-size:11px">含住宿·交通·门票·餐饮</span></div></div>
-</div>
-<div class="section-head">行程概览</div>
-<div class="day-list">${DAYS.slice(1).map(d=>'<div class="card" onclick="go('+d.id+')"><div class="name"><span class="dot" style="background:'+d.color+'"></span>'+d.label+' · '+d.title+'</div><div class="desc">'+d.date+'</div></div>').join('')}</div>
-<div class="section-head">支付提醒</div>
-<div class="pay-summary">
-  <h4>现金</h4><p>小餐馆、寺庙、黄金街、屋台大多只收现金 · 建议每人备 30,000-50,000 / 1500-2500</p>
-</div>
-<div class="pay-summary">
-  <h4>信用卡</h4><p class="ok-text">酒店、百货、连锁店、新干线可用 Visa/Master/JCB</p>
-</div>
-<div class="pay-summary">
-  <h4>Suica</h4><p class="ok-text">iPhone钱包直接添加 · 地铁/JR/便利店通用</p>
-</div>
-<div class="pay-summary">
-  <h4 class="warn">花火门票</h4><p class="warn">海外抽签已结束 · 走国内二手市场 · 确认A/B会场</p>
-</div>
-<div class="pay-summary">
-  <h4 class="warn">Bass托运</h4><p class="warn">琴盒三边和大概率超203cm · 提前打ANA 400-882-8888确认超大件 · 提前3h到机场</p>
-</div>
-<div class="section-head">图例</div>
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-red)"></div>餐厅</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-blue)"></div>景点</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-purple)"></div>酒吧</div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-orange)"></div>酒店</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#aeaeb2"></div>交通</div>
-</div>
-<div class="section-head">预算明细 /人</div>
-<div class="pay-summary">
-  <p>住宿 东京6晚(半间) 27,000/1,350<br>
-  住宿 河口湖1晚 12,000/600<br>
-  交通(含新干线·巴士·周游券) 17,960/898<br>
-  花火门票(二手) 15,000/750<br>
-  景点门票 9,100/455<br>
-  餐饮(8天) 18,900/945<br>
-  大黑PA包车 10,000/500<br>
-  <strong>合计 109,960/5,498</strong><br>
-  <span style="font-size:11px">不含机票·乐器购物·花火票溢价·购物</span></p>
-</div>`;
+  var total = 0;
+  DAYS.forEach(function(d){ d.locations.forEach(function(l){ if(l.budget&&l.budget!=='已购'){ var m=l.budget.match(/¥([0-9,]+)/); if(m) total+=parseInt(m[1].replace(/,/g,'')); }}); });
+  return '<div class="hero"><h1>东京 8日 · 花火 + 富士</h1><p class="subtitle">8/2-8/9 · 2人行 · 花火 · 乐器 · JDM · 美食</p></div>'+
+'<div class="info-grid">'+
+'<div class="info-card"><div class="label">酒店</div><div class="value">FRESA INN<br>上野御徒町<br><span style="font-size:12px;color:var(--text-secondary)">6晚+河口湖1晚</span></div></div>'+
+'<div class="info-card"><div class="label">航班</div><div class="value">NH924 14:15-19:45<br>NH923 09:15-13:05<br><span style="font-size:11px">经济舱 3,650/人</span></div></div>'+
+'<div class="info-card"><div class="label">交通卡</div><div class="value">Suica<br>iPhone钱包添加<br><span style="font-size:11px">JR/地铁/便利店</span></div></div>'+
+'<div class="info-card"><div class="label">预估/人</div><div class="value">约 ¥'+total.toLocaleString()+'<br>≈ ¥'+Math.round(total/EXRATE).toLocaleString()+'<br><span style="font-size:11px">含住·行·票·食</span></div></div>'+
+'</div>'+
+'<div class="section-head">行程概览</div>'+
+'<div class="day-list">'+DAYS.slice(1).map(function(d){ return '<div class="card" onclick="go('+d.id+')"><div class="name"><span class="dot" style="background:'+d.color+'"></span>'+d.label+' · '+d.title+'</div><div class="desc">'+d.date+'</div></div>'; }).join('')+'</div>'+
+'<div class="section-head">支付提醒</div>'+
+'<div class="pay-summary"><h4>现金</h4><p>小餐馆、寺庙、黄金街大多只收现金 · 建议备 ¥30,000-50,000 / ¥1,250-2,090</p></div>'+
+'<div class="pay-summary"><h4>信用卡</h4><p class="ok-text">酒店、百货、连锁店、新干线可用 Visa/Master/JCB</p></div>'+
+'<div class="pay-summary"><h4>Suica</h4><p class="ok-text">iPhone钱包直接添加 · 地铁/JR/便利店通用</p></div>'+
+'<div class="pay-summary"><h4 class="warn">花火门票</h4><p class="warn">走国内二手市场 · 确认A会场 · 拼车MPV提前约</p></div>'+
+'<div class="pay-summary"><h4 class="warn">Bass托运</h4><p class="warn">提前打ANA确认超大件 · 提前3h到机场</p></div>'+
+'<div class="section-head">图例</div>'+
+'<div class="legend"><div class="legend-item"><div class="legend-dot" style="background:var(--tint-red)"></div>餐厅</div><div class="legend-item"><div class="legend-dot" style="background:var(--tint-blue)"></div>景点</div><div class="legend-item"><div class="legend-dot" style="background:var(--tint-purple)"></div>酒吧</div><div class="legend-item"><div class="legend-dot" style="background:var(--tint-orange)"></div>酒店</div></div>';
 }
-// ENGINE
-const map = L.map('map', { center: [HOTEL.lat||35.69,HOTEL.lng||139.74], zoom:11, zoomControl:false, attributionControl:true });
-L.control.zoom({ position:'topright' }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom:19 }).addTo(map);
-const LocateControl = L.Control.extend({options:{position:'bottomright'},onAdd(){const b=L.DomUtil.create('button','locate-btn');b.innerHTML='P';b.title='我的位置';L.DomEvent.disableClickPropagation(b);b.addEventListener('click',()=>{b.classList.add('active');map.locate({setView:true,maxZoom:15})});return b}});new LocateControl().addTo(map);
-let lm,lc;map.on('locationfound',e=>{const r=e.accuracy/2;if(lm){lm.setLatLng(e.latlng);lc.setLatLng(e.latlng).setRadius(r)}else{lm=L.marker(e.latlng,{icon:L.divIcon({className:'',html:'<div style="width:14px;height:14px;border-radius:50%;background:#007aff;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,122,255,.5)"></div><div class="loc-pulse" style="position:absolute;top:0;left:0"></div>',iconSize:[14,14],iconAnchor:[7,7]}),zIndexOffset:2000}).addTo(map);lc=L.circle(e.latlng,{radius:r,color:'#007aff',fillColor:'#007aff',fillOpacity:.08,weight:1}).addTo(map)}});map.on('locationerror',()=>{});
-function icon(c,e){return L.divIcon({className:'',html:'<div style="width:28px;height:28px;border-radius:50%;background:'+c+';border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.18)">'+(e||'')+'</div>',iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-16]})}
-if(HOTEL.lat)L.marker([HOTEL.lat,HOTEL.lng],{icon:icon('#ff9500','H'),zIndexOffset:1000}).addTo(map).bindPopup('<b>'+HOTEL.name+'</b>');
-let ms=[],ps=[];const em={food:'F',spot:'S',hotel:'H',transport:'T',drink:'D'};
-function clr(){ms.forEach(m=>map.removeLayer(m));ps.forEach(p=>map.removeLayer(p));ms=[];ps=[]}
-function sd(i){clr();if(i===0){const pts=[];DAYS.forEach(d=>d.locations.forEach(l=>{if(l.lat)pts.push([l.lat,l.lng])}));if(pts.length)map.fitBounds(pts,{padding:[30,30]});DAYS.slice(1).forEach(d=>{d.locations.filter(l=>l.time!=='—').forEach(l=>{const m=L.circleMarker([l.lat,l.lng],{radius:4,fillColor:d.color,color:'#fff',weight:1.5,fillOpacity:.9}).addTo(map).bindPopup('<b>'+l.name+'</b><br><span style="color:#86868b">'+d.label+'</span>');ms.push(m)})});return}const day=DAYS.find(d=>d.id===i);if(!day)return;const coords=[];day.locations.forEach(l=>{if(!l.lat)return;const m=L.marker([l.lat,l.lng],{icon:icon(day.color,em[l.type]||'M')}).addTo(map);const gq=l.gmap||encodeURIComponent(l.name+' Tokyo');m.bindPopup('<b>'+l.name+'</b>'+(l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':'')+'<br>'+l.desc+(l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':'')+'<br><a href="#" onclick="event.preventDefault();openAS(\''+l.name.replace(/'/g,"\\'")+'\','+l.lat+','+l.lng+',\''+gq+'\')">导航</a>');ms.push(m);if(l.time!=='—')coords.push([l.lat,l.lng])});if(coords.length>1){const pl=L.polyline(coords,{color:day.color,weight:2.5,opacity:.5,dashArray:'6,5'}).addTo(map);ps.push(pl)}if(coords.length)map.fitBounds(coords,{padding:[40,40],maxZoom:14})}
-function payChips(p){if(!p)return'';let h='<div class="pays">';const m={cash:'现金',card:'卡',suica:'Suica',paypay:'PayPay',alipay:'支付宝',wechat:'微信'};for(const[k,l]of Object.entries(m)){if(p[k]!==undefined){const c=p[k]===1?'ok':p[k]===0.5?'idk':'no';h+='<span class="pay '+c+'">'+l+'</span>'}}return h+'</div>'}
-const IN_APP=!!((navigator.userAgent||'').toLowerCase().match(/micromessenger|xhs|xhsdiscover|discover\/|tiktok|aweme|weibo|qq\/|alipayclient|dingtalk|lark|feishu|ucbrowser|baiduboxapp|toutiao|newsarticle/));
-function xhsKw(l){return(l.xhsKeyword||(l.name||'').replace(/.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ')).trim()}
-function dpKw(l){return(l.dianpingKeyword||(l.name||'').replace(/.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ')).trim()}
-function locCard(l,di){const dot=l.type==='food'?'food':l.type==='spot'?'spot':l.type==='drink'?'drink':l.type==='hotel'?'hotel':'transport';const bdg=l.type==='food'?'<span class="badge food">餐</span>':l.type==='spot'?'<span class="badge spot">景</span>':l.type==='drink'?'<span class="badge drink">饮</span>':'';const gq=l.gmap||encodeURIComponent(l.name+' Tokyo');let lnk='<button class="btn nav" onclick="openAS(\''+l.name.replace(/'/g,"\\'")+'\','+l.lat+','+l.lng+',\''+gq+'\')">导航</button>';const dpE=l.dianping!==false&&(l.dianping||l.dianpingKeyword||l.type==='food'||l.type==='drink');if(dpE){const dpH=IN_APP?'https://m.dianping.com/searchshop?keyword='+encodeURIComponent(dpKw(l)):'dianping://searchshoplist?keyword='+encodeURIComponent(dpKw(l));lnk+='<a href="'+dpH+'" class="btn dp">大众点评</a>'}if(l.reserve)lnk+='<a href="'+l.reserve+'" target="_blank" class="btn rsv">预约</a>';return'<div class="tl-item"><div class="tl-dot '+dot+'"></div><div class="card"><div class="time">'+(l.time!=='—'?l.time:'备选')+'</div><div class="name">'+bdg+' '+l.name+'</div><div class="desc">'+l.desc+'</div>'+(l.budget?'<div class="budget">'+l.budget+' (日元/人民币)</div>':'')+payChips(l.pay)+'<div class="links">'+lnk+'</div></div></div>'}
-function rd(i){const d=DAYS.find(x=>x.id===i);if(!d)return'';const main=d.locations.filter(l=>l.time!=='—');const alt=d.locations.filter(l=>l.time==='—');let h='<div class="day-head"><h2>'+d.title+'</h2><p>'+d.date+'</p></div>';if(main.length){h+='<div class="section-head">行程</div><div class="timeline">';main.forEach(l=>h+=locCard(l,i));h+='</div>'}if(alt.length){h+='<div class="section-head">备选</div><div class="timeline">';alt.forEach(l=>h+=locCard(l,i));h+='</div>'}return h}
-let cur=0;const te=document.getElementById('tabs'),ce=document.getElementById('content');
-DAYS.forEach(d=>{const b=document.createElement('button');b.className='tab'+(d.id===0?' active':'');b.dataset.day=d.id;b.textContent=d.label;te.appendChild(b)});
-function go(i){cur=i;te.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',+t.dataset.day===i));ce.innerHTML=i===0?overviewContent():rd(i);sd(i);ce.scrollTo({top:0});const tab=te.querySelector('[data-day="'+i+'"]');if(tab)tab.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
-te.addEventListener('click',e=>{const t=e.target.closest('.tab');if(t)go(+t.dataset.day)});go(0);
-const ao=document.createElement('div');ao.className='as-overlay';ao.innerHTML='<div class="as-sheet"><div class="as-group" id="as-opts"></div><div class="as-group"><button class="as-item as-cancel" onclick="closeAS()">取消</button></div></div>';document.body.appendChild(ao);ao.addEventListener('click',e=>{if(e.target===ao)closeAS()});
+
+// ══════════  ENGINE  ══════════
+const map = L.map('map', { center: [HOTEL.lat||35.69, HOTEL.lng||139.74], zoom: 12, zoomControl: false, attributionControl: true });
+L.control.zoom({ position: 'topright' }).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+
+const LocateControl = L.Control.extend({ options: { position: 'bottomright' }, onAdd() { const b = L.DomUtil.create('button', 'locate-btn'); b.innerHTML = 'P'; b.title = '我的位置'; L.DomEvent.disableClickPropagation(b); b.addEventListener('click', function(){ b.classList.add('active'); map.locate({ setView: true, maxZoom: 15 }); }); return b; } });
+new LocateControl().addTo(map);
+let locMarker, locCircle;
+map.on('locationfound', function(e){ var r=e.accuracy/2; if(locMarker){ locMarker.setLatLng(e.latlng); locCircle.setLatLng(e.latlng).setRadius(r); } else { locMarker=L.marker(e.latlng,{ icon:L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#007aff;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,122,255,.5)"></div><div class="loc-pulse" style="position:absolute;top:0;left:0"></div>', iconSize:[14,14], iconAnchor:[7,7] }), zIndexOffset:2000 }).addTo(map); locCircle=L.circle(e.latlng,{ radius:r, color:'#007aff', fillColor:'#007aff', fillOpacity:.08, weight:1 }).addTo(map); } });
+map.on('locationerror', function(){});
+
+function icon(c, emoji){ return L.divIcon({ className:'', html:'<div style="width:28px;height:28px;border-radius:50%;background:'+c+';border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.18)">'+(emoji||'')+'</div>', iconSize:[28,28], iconAnchor:[14,14], popupAnchor:[0,-16] }); }
+if(HOTEL.lat) L.marker([HOTEL.lat, HOTEL.lng], { icon: icon('#ff9500','H'), zIndexOffset:1000 }).addTo(map).bindPopup('<b>'+HOTEL.name+'</b>');
+
+let markers=[], polylines=[];
+const emojis={ food:'F', spot:'S', hotel:'H', transport:'T', drink:'D' };
+
+function clearMap(){ markers.forEach(function(m){ map.removeLayer(m); }); polylines.forEach(function(p){ map.removeLayer(p); }); markers=[]; polylines=[]; }
+
+function showDay(idx){
+  clearMap();
+  if(idx===0){
+    var pts=[];
+    DAYS.forEach(function(d){ d.locations.forEach(function(l){ if(l.lat) pts.push([l.lat,l.lng]); }); });
+    if(pts.length) map.fitBounds(pts,{ padding:[30,30] });
+    DAYS.slice(1).forEach(function(d){
+      d.locations.filter(function(l){ return l.time!=='—'; }).forEach(function(l){
+        var m=L.circleMarker([l.lat,l.lng],{ radius:4, fillColor:d.color, color:'#fff', weight:1.5, fillOpacity:.9 }).addTo(map).bindPopup('<b>'+l.name+'</b><br><span style="color:#86868b">'+d.label+'</span>');
+        markers.push(m);
+      });
+    });
+    return;
+  }
+  var day=DAYS.find(function(d){ return d.id===idx; });
+  if(!day) return;
+  var coords=[];
+  day.locations.forEach(function(l){
+    if(!l.lat) return;
+    var m=L.marker([l.lat,l.lng],{ icon: icon(day.color, emojis[l.type]||'M') }).addTo(map);
+    var gq=l.gmap||encodeURIComponent(l.name+' Tokyo');
+    m.bindPopup('<b>'+l.name+'</b>'+(l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':'')+'<br>'+l.desc+(l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':'')+'<br><a href="#" onclick="event.preventDefault();openAS(\''+l.name.replace(/'/g,"\\'")+'\','+l.lat+','+l.lng+',\''+gq+'\')">导航</a>');
+    markers.push(m);
+    if(l.time!=='—') coords.push([l.lat,l.lng]);
+  });
+  if(coords.length>1){ var pl=L.polyline(coords,{ color:day.color, weight:2.5, opacity:.5, dashArray:'6,5' }).addTo(map); polylines.push(pl); }
+  if(coords.length) map.fitBounds(coords,{ padding:[40,40], maxZoom:14 });
+}
+
+function payChips(pay){ if(!pay) return ''; var h='<div class="pays">'; var m={ cash:'现金', card:'卡', suica:'Suica', paypay:'PayPay', alipay:'支付宝', wechat:'微信' }; for(var k in m){ if(pay[k]!==undefined){ var c=pay[k]===1?'ok':pay[k]===0.5?'idk':'no'; h+='<span class="pay '+c+'">'+m[k]+'</span>'; } } return h+'</div>'; }
+
+const IN_APP=!!((navigator.userAgent||'').toLowerCase().match(/micromessenger|xhs|xhsdiscover|tiktok|aweme|weibo|qq\/|alipayclient|dingtalk|lark|feishu|ucbrowser|baiduboxapp|toutiao|newsarticle/));
+
+function locCard(loc, dayIdx){
+  var dot=loc.type==='food'?'food':loc.type==='spot'?'spot':loc.type==='drink'?'drink':loc.type==='hotel'?'hotel':'transport';
+  var bdg=loc.type==='food'?'<span class="badge food">餐</span>':loc.type==='spot'?'<span class="badge spot">景</span>':loc.type==='drink'?'<span class="badge drink">饮</span>':'';
+  var gq=loc.gmap||encodeURIComponent(loc.name+' Tokyo');
+  var lnk='<button class="btn nav" onclick="openAS(\''+loc.name.replace(/'/g,"\\'")+'\','+loc.lat+','+loc.lng+',\''+gq+'\')">导航</button>';
+  if(loc.reserve) lnk+='<a href="'+loc.reserve+'" target="_blank" class="btn rsv">预约</a>';
+  return '<div class="tl-item"><div class="tl-dot '+dot+'"></div><div class="card"><div class="time">'+(loc.time!=='—'?loc.time:'备选')+'</div><div class="name">'+bdg+' '+loc.name+'</div><div class="desc">'+loc.desc+'</div>'+(loc.budget?'<div class="budget">'+loc.budget+' (日元/人民币)</div>':'')+payChips(loc.pay)+'<div class="links">'+lnk+'</div></div></div>';
+}
+
+function renderDay(idx){
+  var d=DAYS.find(function(x){ return x.id===idx; }); if(!d) return '';
+  var main=d.locations.filter(function(l){ return l.time!=='—'; });
+  var alt=d.locations.filter(function(l){ return l.time==='—'; });
+  var h='<div class="day-head"><h2>'+d.title+'</h2><p>'+d.date+'</p></div>';
+  if(main.length){ h+='<div class="section-head">行程</div><div class="timeline">'; main.forEach(function(l){ h+=locCard(l,idx); }); h+='</div>'; }
+  if(alt.length){ h+='<div class="section-head">备选</div><div class="timeline">'; alt.forEach(function(l){ h+=locCard(l,idx); }); h+='</div>'; }
+  return h;
+}
+
+var cur=0;
+const tabsEl=document.getElementById('tabs'), contentEl=document.getElementById('content');
+DAYS.forEach(function(d){ var b=document.createElement('button'); b.className='tab'+(d.id===0?' active':''); b.dataset.day=d.id; b.textContent=d.label; tabsEl.appendChild(b); });
+
+function go(idx){
+  cur=idx;
+  tabsEl.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active', +t.dataset.day===idx); });
+  contentEl.innerHTML=idx===0?overviewContent():renderDay(idx);
+  showDay(idx);
+  contentEl.scrollTo({top:0});
+  var tab=tabsEl.querySelector('[data-day="'+idx+'"]');
+  if(tab) tab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+}
+
+tabsEl.addEventListener('click',function(e){ var t=e.target.closest('.tab'); if(t) go(+t.dataset.day); });
+go(0);
+
+const asOverlay=document.createElement('div'); asOverlay.className='as-overlay';
+asOverlay.innerHTML='<div class="as-sheet"><div class="as-group" id="as-opts"></div><div class="as-group"><button class="as-item as-cancel" onclick="closeAS()">取消</button></div></div>';
+document.body.appendChild(asOverlay);
+asOverlay.addEventListener('click',function(e){ if(e.target===asOverlay) closeAS(); });
+
 const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
-function openAS(n,la,ln,gm){const q=gm||encodeURIComponent(n+' Tokyo');const en=encodeURIComponent(n);const sn=n.replace(/'/g,"\\'");const au=IN_APP?'https://maps.apple.com/?q='+la+','+ln+'&ll='+la+','+ln+'&name='+en:'maps://maps.apple.com/?q='+la+','+ln+'&name='+en;const gu='https://www.google.com/maps/search/?api=1&query='+q;document.getElementById('as-opts').innerHTML='<button class="as-item" onclick="window.open(\''+au+'\');closeAS()">Apple Maps</button><button class="as-item" onclick="window.open(\''+gu+'\');closeAS()">Google Maps</button><button class="as-item" onclick="window.open(\''+(IN_APP?'https://uri.amap.com/marker?position='+ln+','+la+'&name='+en+'&src=trip&coordinate=wgs84&callnative=1':(IS_IOS?'iosamap':'androidamap')+'://viewMap?sourceApplication=trip&poiname='+en+'&lat='+la+'&lon='+ln+'&dev=0')+'\');closeAS()">高德地图</button>';ao.classList.add('show')}
-function closeAS(){ao.classList.remove('show')}
+function openAS(name, lat, lng, gmap){
+  var q=gmap||encodeURIComponent(name+' Tokyo');
+  var en=encodeURIComponent(name);
+  var sn=name.replace(/'/g,"\\'");
+  var au=IN_APP?'https://maps.apple.com/?q='+lat+','+lng+'&ll='+lat+','+lng+'&name='+en:'maps://maps.apple.com/?q='+lat+','+lng+'&name='+en;
+  var gu='https://www.google.com/maps/search/?api=1&query='+q;
+  document.getElementById('as-opts').innerHTML='<button class="as-item" onclick="window.open(\''+au+'\');closeAS()">Apple Maps</button><button class="as-item" onclick="window.open(\''+gu+'\');closeAS()">Google Maps</button><button class="as-item" onclick="window.open(\''+(IN_APP?'https://uri.amap.com/marker?position='+lng+','+lat+'&name='+en+'&src=trip&coordinate=wgs84&callnative=1':(IS_IOS?'iosamap':'androidamap')+'://viewMap?sourceApplication=trip&poiname='+en+'&lat='+lat+'&lon='+lng+'&dev=0')+'\');closeAS()">高德地图</button>';
+  asOverlay.classList.add('show');
+}
+function closeAS(){ asOverlay.classList.remove('show'); }
 </script>
 </body>
 </html>
