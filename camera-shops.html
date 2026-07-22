@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>东京相机地图 · GR IIIx & X100VI</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#f5f5f7;--card-bg:#fff;--text:#1d1d1f;--text2:#86868b;--accent:#0071e3;--red:#ff3b30;--orange:#ff9500;--green:#34c759;--purple:#af52de;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+#map{width:100%;height:40vh;min-height:280px;position:sticky;top:0;z-index:100}
+.content{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card-bg);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);position:relative}
+.card h3{font-size:17px;margin:0 40px 4px 0}
+.card .addr{font-size:13px;color:var(--text2);margin-bottom:4px}
+.card .tags{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600}
+.tag.fuji{background:rgba(52,199,89,.1);color:var(--green)}
+.tag.ricoh{background:rgba(255,149,0,.1);color:var(--orange)}
+.tag.used{background:rgba(0,122,255,.1);color:#007aff}
+.tag.new{background:rgba(175,82,222,.1);color:var(--purple)}
+.tag.tip{background:rgba(255,59,48,.08);color:var(--red)}
+.tag.osaka{background:rgba(0,0,0,.06);color:var(--text2)}
+.card .desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:8px}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;text-decoration:none;color:#fff;background:var(--accent)}
+.btn:active{filter:brightness(.9)}
+.hero{text-align:center;padding:20px 16px}
+.hero h1{font-size:24px;font-weight:700}
+.hero p{color:var(--text2);margin-top:4px;font-size:14px}
+.section{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.03em;padding:20px 0 8px}
+.strategy{background:rgba(255,59,48,.04);border-radius:var(--radius);padding:14px 16px;margin:10px 0;font-size:13px;line-height:1.8}
+.as-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.as-overlay.show{opacity:1;pointer-events:auto}
+.as-sheet{width:100%;max-width:420px;padding:0 8px 34px}
+.as-group{background:rgba(255,255,255,.88);backdrop-filter:blur(20px);border-radius:14px;overflow:hidden;margin-bottom:8px}
+.as-group .as-item{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;font-size:18px;color:#007aff;font-weight:500;border:none;background:none;width:100%;cursor:pointer}
+.as-group .as-item+.as-item{border-top:.5px solid rgba(0,0,0,.12)}
+.as-cancel{font-weight:600}
+.leaflet-popup-content-wrapper{border-radius:var(--radius)!important;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif!important}
+.leaflet-control-zoom a{border-radius:10px!important}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="content">
+<div class="hero">
+  <h1>东京相机地图</h1>
+  <p>GR IIIx 优先 · X100VI 随缘 · 上野出发</p>
+</div>
+
+<div class="strategy">
+  <strong>策略</strong><br>
+  1. 到东京后第一天就扫店——越早库存越多<br>
+  2. 每家店进去先把两个型号都问一遍<br>
+  3. 中午 12:00 左右去（店员补完上午的货）<br>
+  4. マップカメラ和北村写真機店中古最靠谱
+</div>
+
+<div class="section">GR IIIx 优先 (7家)</div>
+
+<div class="card">
+  <h3>マップカメラ 新宿</h3>
+  <div class="addr">新宿区西新宿1-12-5 · 10:30-20:30</div>
+  <div class="tags"><span class="tag used">中古丰富</span><span class="tag ricoh">GR IIIx</span><span class="tag fuji">X100VI</span><span class="tag tip">首推</span></div>
+  <div class="desc">日本最大中古相机店。GR IIIx 中古常年在库。X100VI 中古加价 10-20% 但能买到。新宿站步行5分。</div>
+  <button class="btn" onclick="navTo(35.6905,139.6975,'Map+Camera+Shinjuku')">导航</button>
+</div>
+
+<div class="card">
+  <h3>新宿 北村写真機店</h3>
+  <div class="addr">新宿区新宿3-17-5 · 10:00-20:00</div>
+  <div class="tags"><span class="tag used">中古 5000+台</span><span class="tag ricoh">GR IIIx</span><span class="tag tip">重点推荐</span></div>
+  <div class="desc">北村写真機店的概念旗舰店，世界级中古库存。GR 系列常有。新宿三丁目站 C5 出口直结。B1F 画廊可逛。</div>
+  <button class="btn" onclick="navTo(35.6916,139.7049,'北村写真機店+新宿')">导航</button>
+</div>
+
+<div class="card">
+  <h3>ヨドバシカメラ 新宿西口本店</h3>
+  <div class="addr">新宿区西新宿1-11-1 · 10:00-22:00</div>
+  <div class="tags"><span class="tag new">新品</span><span class="tag ricoh">GR IIIx</span><span class="tag fuji">X100VI</span></div>
+  <div class="desc">日本最大电器店。GR IIIx 到货频率比 X100VI 高得多。10:00 开门进去问，运气好能拿到当日配送的。X100VI Reddit 有人买到现货。</div>
+  <button class="btn" onclick="navTo(35.6898,139.6989,'Yodobashi+Camera+Shinjuku')">导航</button>
+</div>
+
+<div class="card">
+  <h3>フジヤカメラ 中野</h3>
+  <div class="addr">中野区中野5-61-1 · 10:00-20:00</div>
+  <div class="tags"><span class="tag used">中古宝库</span><span class="tag ricoh">GR IIIx</span><span class="tag fuji">X100VI</span></div>
+  <div class="desc">中古相机宝库。GR IIIx 中古价格比マップカメラ稍低。新宿→中野 JR中央线 5分。顺便逛中野百老汇。</div>
+  <button class="btn" onclick="navTo(35.7057,139.6655,'Fujiya+Camera+Nakano')">导航</button>
+</div>
+
+<div class="card">
+  <h3>ヨドバシカメラ 秋叶原</h3>
+  <div class="addr">千代田区神田花岡町1-1 · 9:30-22:00</div>
+  <div class="tags"><span class="tag new">新品</span><span class="tag ricoh">GR IIIx</span><span class="tag fuji">X100VI</span></div>
+  <div class="desc">离上野最近。Day 2 逛秋叶原时可顺路。和新宿本店分开配货，两边库存独立。</div>
+  <button class="btn" onclick="navTo(35.6983,139.7731,'Yodobashi+Camera+Akihabara')">导航</button>
+</div>
+
+<div class="card">
+  <h3>カメラのキタムラ 上野店</h3>
+  <div class="addr">台东区上野4-4-5 · 10:00-19:00</div>
+  <div class="tags"><span class="tag used">中古</span><span class="tag ricoh">GR IIIx</span></div>
+  <div class="desc">离酒店最近，走路即到。库存不如大店但值得每天路过看一眼。</div>
+  <button class="btn" onclick="navTo(35.7102,139.7755,'Kitamura+Camera+Ueno')">导航</button>
+</div>
+
+<div class="card">
+  <h3>リコーイメージングスクエア新宿</h3>
+  <div class="addr">新宿区西新宿1-25-1 新宿センタービル B1 · 10:30-18:30</div>
+  <div class="tags"><span class="tag ricoh">GR 官方</span><span class="tag new">试机</span></div>
+  <div class="desc">理光官方展厅，可以试玩 GR IIIx。如果有官方抽选这里会通知。</div>
+  <button class="btn" onclick="navTo(35.6925,139.6946,'Ricoh+Imaging+Square+Shinjuku')">导航</button>
+</div>
+
+<div class="section">X100VI 补充 (3家)</div>
+
+<div class="card">
+  <h3>ビックカメラ 有楽町店</h3>
+  <div class="addr">千代田区有楽町1-11-1 · 10:00-21:00</div>
+  <div class="tags"><span class="tag fuji">X100VI</span><span class="tag new">新品</span></div>
+  <div class="desc">东京最大ビックカメラ。有楽町站直结，上野→有楽町 JR 山手线 10分。相机区在 7F。</div>
+  <button class="btn" onclick="navTo(35.6747,139.7630,'Bic+Camera+Yurakucho')">导航</button>
+</div>
+
+<div class="card">
+  <h3>レモン社 秋叶原</h3>
+  <div class="addr">千代田区外神田3-12-8 · 11:00-19:30</div>
+  <div class="tags"><span class="tag used">中古</span><span class="tag fuji">X100VI</span></div>
+  <div class="desc">老牌中古相机店，品相检查严格。去之前可打电话确认。</div>
+  <button class="btn" onclick="navTo(35.7005,139.7710,'Lemon+Sha+Camera+Akihabara')">导航</button>
+</div>
+
+<div class="card">
+  <h3>富士フイルム ワンダーフォトショップ 六本木</h3>
+  <div class="addr">港区六本木7-22-2 · 11:00-19:00</div>
+  <div class="tags"><span class="tag fuji">富士直营</span></div>
+  <div class="desc">富士直营店。极少有现货但店员可告知到货时间。六本木站步行3分。</div>
+  <button class="btn" onclick="navTo(35.6632,139.7304,'Fujifilm+Wonder+Photo+Shop+Roppongi')">导航</button>
+</div>
+
+<div class="section">大阪 (1家 · 关西可逛)</div>
+
+<div class="card">
+  <h3>カメラのナニワ 梅田2号店</h3>
+  <div class="addr">大阪市北区梅田1-2-2 大阪駅前第2ビル B1 · 10:00-19:00</div>
+  <div class="tags"><span class="tag used">中古</span><span class="tag ricoh">GR IIIx</span><span class="tag osaka">大阪</span></div>
+  <div class="desc">ヨドバシ梅田正对面。中古相机专卖。注意：<strong>在大阪梅田，非东京。</strong>大阪站步行3分。</div>
+  <button class="btn" onclick="navTo(34.7004,135.4978,'Camera+Naniwa+Umeda')">导航</button>
+</div>
+
+<div class="section">扫描路线</div>
+<div class="strategy">
+  <strong>新宿扫街路线</strong><br>
+  新宿站西口 → ヨドバシ(10:00) → ビック(10:15) → リコー官方(10:30) → マップカメラ(11:00) → 北村写真機店(11:30)<br>
+  全程步行，5 家店 1.5 小时内扫完。<br><br>
+  <strong>Day 2（8/4）秋叶原顺路</strong><br>
+  御茶水逛乐器 → 秋叶原 → ヨドバシ秋叶原 → レモン社<br><br>
+  <strong>每天路过</strong><br>
+  キタムラ上野店 — 离酒店近，每天出门回来都看一眼。
+</div>
+</div>
+
+<script>
+const map=L.map('map',{center:[35.69,139.72],zoom:13,zoomControl:false});
+L.control.zoom({position:'topright'}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
+
+const stores=[
+  {n:'マップカメラ',la:35.6905,ln:139.6975,c:'#007aff',e:'M'},
+  {n:'北村写真機店',la:35.6916,ln:139.7049,c:'#ff9500',e:'K'},
+  {n:'ヨドバシ新宿',la:35.6898,ln:139.6989,c:'#34c759',e:'Y'},
+  {n:'フジヤカメラ',la:35.7057,ln:139.6655,c:'#007aff',e:'F'},
+  {n:'ヨドバシ秋叶原',la:35.6983,ln:139.7731,c:'#34c759',e:'Y'},
+  {n:'キタムラ上野',la:35.7102,ln:139.7755,c:'#af52de',e:'K'},
+  {n:'リコー新宿',la:35.6925,ln:139.6946,c:'#ff9500',e:'R'},
+  {n:'ビック有楽町',la:35.6747,ln:139.7630,c:'#ff3b30',e:'B'},
+  {n:'レモン社',la:35.7005,ln:139.7710,c:'#ff9500',e:'L'},
+  {n:'富士六本木',la:35.6632,ln:139.7304,c:'#34c759',e:'F'},
+  {n:'ナニワ梅田',la:34.7004,ln:135.4978,c:'#86868b',e:'N'},
+];
+stores.forEach(s=>{
+  L.marker([s.la,s.ln],{icon:L.divIcon({className:'',html:'<div style="width:28px;height:28px;border-radius:50%;background:'+s.c+';border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18)">'+s.e+'</div>',iconSize:[28,28],iconAnchor:[14,14]})}).addTo(map).bindPopup('<b>'+s.n+'</b>');
+});
+
+function navTo(la,ln,q){
+  const o=document.createElement('div');o.className='as-overlay show';
+  o.innerHTML='<div class="as-sheet"><div class="as-group">'+
+    '<button class="as-item" onclick="window.open(\'https://maps.apple.com/?q='+la+','+ln+'\');this.closest(\'.as-overlay\').remove()">Apple Maps</button>'+
+    '<button class="as-item" onclick="window.open(\'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)+'\');this.closest(\'.as-overlay\').remove()">Google Maps</button>'+
+    '<button class="as-item" onclick="window.open(\'https://uri.amap.com/marker?position='+ln+','+la+'&name='+encodeURIComponent(q)+'&src=trip&coordinate=wgs84&callnative=1\');this.closest(\'.as-overlay\').remove()">高德地图</button>'+
+    '</div><div class="as-group"><button class="as-item as-cancel" onclick="this.closest(\'.as-overlay\').remove()">取消</button></div></div>';
+  document.body.appendChild(o);
+  o.addEventListener('click',e=>{if(e.target===o)o.remove()});
+}
+</script>
+</body>
+</html>
