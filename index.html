@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>东京 8日 · 长冈花火 + 富士</title>
+<title>东京 8日 · 中古淘宝 + 富士</title>
 <meta name="description" content="日本2人行：长冈花火 + 御茶水乐器 + 大黑PA + 箱根富士河口湖 · 8/2-8/9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -185,15 +185,27 @@ const DAYS = [
     ]
   },
   {
-    id: 2, label: 'D1 花火', date: '8/3 周一', title: '长冈花火大会',
-    color: '#ff3b30',
+    id: 2, label: 'D1 中古', date: '8/3 周一', title: '川崎BOOKOFF + 中野Mandarake',
+    color: '#ff9500',
     locations: [
-      { name: '上野站出发', lat: 35.7138, lng: 139.7767, type: 'transport', time: '(MPV包车)',
-        desc: '拼车MPV往返 · 单程约3-4h · 回程可能凌晨', gmap: 'Ueno+Station' },
-      { name: '长冈花火大会会场', lat: 37.4440, lng: 138.8500, type: 'spot', time: '19:20',
-        desc: '日本三大花火 · 不死鸟烟火 · 19:20-21:10 · 2万发/晚 · 建议A会场(靠长冈站)', budget: '15000/750', gmap: 'Nagaoka+Fireworks' },
-      { name: 'MPV返回东京', lat: 35.7138, lng: 139.7767, type: 'transport', time: '凌晨',
-        desc: '拼车MPV返回 · 凌晨到达酒店 · 花火票走国内二手市场', gmap: 'Ueno+Station' }
+      { name: '上野→川崎', lat: 35.7138, lng: 139.7767, type: 'transport', time: '09:00',
+        desc: 'JR京滨东北线 25分 310', gmap: 'Ueno+Station' },
+      { name: 'BOOKOFF 川崎モアーズ', lat: 35.5310, lng: 139.6970, type: 'spot', time: '09:30',
+        desc: '川崎站直结3F · 综合大型中古 · 10:00-22:00', gmap: 'BOOKOFF+SUPER+BAZAAR+Kawasaki+MORES' },
+      { name: '川崎大師 平間寺', lat: 35.5339, lng: 139.7295, type: 'spot', time: '10:45',
+        desc: '关东三大本山 · 除厄大师 · 仲见世通吃久寿饼 · 京急大师线5分 150', gmap: 'Kawasaki+Daishi+Heikenji' },
+      { name: 'BOOKOFF 409号川崎港町', lat: 35.5330, lng: 139.7530, type: 'spot', time: '11:30',
+        desc: '大師步行8分 · ヤマダ電機2F · ホビー/トレカ強 · 10:00-20:00', gmap: 'BOOKOFF+409+Kawasaki' },
+      { name: '川崎午餐', lat: 35.5310, lng: 139.6970, type: 'food', time: '12:30',
+        desc: '川崎站周边', budget: '1200/60', gmap: 'Kawasaki+Station+lunch' },
+      { name: '川崎→中野', lat: 35.7094, lng: 139.6658, type: 'transport', time: '13:30',
+        desc: 'JR 35分 500', gmap: 'Nakano+Station' },
+      { name: '中野 Broadway', lat: 35.7094, lng: 139.6658, type: 'spot', time: '14:10',
+        desc: 'Mandarake本店+20+专门馆 · 漫画/玩具/同人/特摄/动画cel · 营业至20:00', gmap: 'Nakano+Broadway' },
+      { name: '中野→上野', lat: 35.7138, lng: 139.7767, type: 'transport', time: '17:30',
+        desc: 'JR中央线 25分 320', gmap: 'Ueno+Station' },
+      { name: '上野晚餐', lat: 35.7100, lng: 139.7745, type: 'food', time: '18:00',
+        desc: '阿美横/上野站周边 · 早回为D2蓄力', budget: '1500/75', gmap: 'Ameyoko+Ueno' }
     ]
   },
   {
@@ -317,7 +329,7 @@ const DAYS = [
 ];
 function overviewContent() {
   return `
-<div class="hero"><h1>东京 8日 · 花火 + 富士</h1><p class="subtitle">8/2 - 8/9 · 2人行 · 花火 · 乐器 · JDM · 富士</p></div>
+<div class="hero"><h1>东京 8日 · 中古淘宝 + 富士</h1><p class="subtitle">8/2 - 8/9 · 2人行 · 中古淘宝 · 乐器 · JDM · 富士</p></div>
 <div class="info-grid">
   <div class="info-card"><div class="label">酒店</div><div class="value">FRESA INN<br>上野御徒町<br><span style="font-size:12px;color:var(--text-secondary)">9000/晚 450 · 6晚+河口湖1晚</span></div></div>
   <div class="info-card"><div class="label">航班</div><div class="value">NH924 CAN→HND<br>8/2 14:15→19:45<br>NH923 HND→CAN<br>8/9 09:15→13:05<br><span style="font-size:11px">经济舱 3650/人</span></div></div>
@@ -337,7 +349,7 @@ function overviewContent() {
   <h4>Suica</h4><p class="ok-text">iPhone钱包直接添加 · 地铁/JR/便利店通用</p>
 </div>
 <div class="pay-summary">
-  <h4 class="warn">花火门票</h4><p class="warn">海外抽签已结束 · 走国内二手市场 · 确认A/B会场</p>
+  <h4>D1 中古淘宝</h4><p>川崎BOOKOFF上午 + 中野Broadway下午 · 淘宝类店铺大部分只收现金</p>
 </div>
 <div class="pay-summary">
   <h4 class="warn">Bass托运</h4><p class="warn">琴盒三边和大概率超203cm · 提前打ANA 400-882-8888确认超大件 · 提前3h到机场</p>
@@ -355,7 +367,6 @@ function overviewContent() {
   <p>住宿 东京6晚(半间) 27,000/1,350<br>
   住宿 河口湖1晚 12,000/600<br>
   交通(含新干线·巴士·周游券) 17,960/898<br>
-  花火门票(二手) 15,000/750<br>
   景点门票 9,100/455<br>
   餐饮(8天) 18,900/945<br>
   大黑PA包车 10,000/500<br>
