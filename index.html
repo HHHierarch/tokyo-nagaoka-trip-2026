@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>东京 8日 · 长冈花火 + 富士</title>
-<meta name="description" content="东京 + 长冈花火 + 箱根富士河口湖 · 8/2-8/9 · 2人行">
+<title>东京 8日 · 乐器 + JDM + 富士</title>
+<meta name="description" content="东京 · 乐器 · JDM · 箱根富士河口湖 · 8/2-8/9 · 2人行">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -232,7 +232,7 @@ const DAYS = [
 function overviewContent() {
   var total = 0;
   DAYS.forEach(function(d){ d.locations.forEach(function(l){ if(l.budget&&l.budget!=='已购'){ var m=l.budget.match(/¥([0-9,]+)/); if(m) total+=parseInt(m[1].replace(/,/g,'')); }}); });
-  return '<div class="hero"><h1>东京 8日 · 花火 + 富士</h1><p class="subtitle">8/2-8/9 · 2人行 · 花火 · 乐器 · JDM · 美食</p></div>'+
+  return '<div class="hero"><h1>东京 8日 · 乐器 + JDM + 富士</h1><p class="subtitle">8/2-8/9 · 2人行 · 乐器 · 中古 · JDM · 富士</p></div>'+
 '<div class="info-grid">'+
 '<div class="info-card"><div class="label">酒店</div><div class="value">FRESA INN<br>上野御徒町<br><span style="font-size:12px;color:var(--text-secondary)">6晚+河口湖1晚</span></div></div>'+
 '<div class="info-card"><div class="label">航班</div><div class="value">NH924 14:15-19:45<br>NH923 09:15-13:05<br><span style="font-size:11px">经济舱 3,650/人</span></div></div>'+
@@ -245,7 +245,6 @@ function overviewContent() {
 '<div class="pay-summary"><h4>现金</h4><p>小餐馆、寺庙、黄金街大多只收现金 · 建议备 ¥30,000-50,000 / ¥1,250-2,090</p></div>'+
 '<div class="pay-summary"><h4>信用卡</h4><p class="ok-text">酒店、百货、连锁店、新干线可用 Visa/Master/JCB</p></div>'+
 '<div class="pay-summary"><h4>Suica</h4><p class="ok-text">iPhone钱包直接添加 · 地铁/JR/便利店通用</p></div>'+
-'<div class="pay-summary"><h4 class="warn">花火门票</h4><p class="warn">走国内二手市场 · 确认A会场 · 拼车MPV提前约</p></div>'+
 '<div class="pay-summary"><h4 class="warn">Bass托运</h4><p class="warn">提前打ANA确认超大件 · 提前3h到机场</p></div>'+
 '<div class="section-head">图例</div>'+
 '<div class="legend"><div class="legend-item"><div class="legend-dot" style="background:var(--tint-red)"></div>餐厅</div><div class="legend-item"><div class="legend-dot" style="background:var(--tint-blue)"></div>景点</div><div class="legend-item"><div class="legend-dot" style="background:var(--tint-purple)"></div>酒吧</div><div class="legend-item"><div class="legend-dot" style="background:var(--tint-orange)"></div>酒店</div></div>';
