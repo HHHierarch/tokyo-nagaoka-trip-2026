@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>银座购物地图</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root {
+  --bg: #ffffff; --bg2: #f5f5f7; --text: #1d1d1f; --text2: #86868b;
+  --accent: #ff9500; --radius: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,'SF Pro Text','Helvetica Neue',sans-serif; background:var(--bg2); color:var(--text); -webkit-font-smoothing:antialiased; }
+#map { width:100%; height:45vh; min-height:300px; position:sticky; top:0; z-index:100; }
+.content { max-width:680px; margin:0 auto; padding:16px; }
+h1 { font-size:24px; font-weight:700; text-align:center; padding:20px 0 10px; }
+.sub { font-size:15px; color:var(--text2); text-align:center; margin-bottom:16px; }
+.shop { background:var(--bg); border-radius:var(--radius); padding:14px 16px; margin-bottom:10px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.shop .name { font-size:17px; font-weight:600; }
+.shop .addr { font-size:13px; color:var(--text2); margin-top:4px; }
+.shop .desc { font-size:14px; color:var(--text2); margin-top:6px; line-height:1.5; }
+.shop .tag { display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px; margin-right:4px; margin-top:6px; }
+.tag.cam { background:rgba(0,122,255,.1); color:#007aff; }
+.tag.jwl { background:rgba(255,149,0,.1); color:#ff9500; }
+.tag.perf { background:rgba(175,82,222,.1); color:#af52de; }
+.tag.fash { background:rgba(52,199,89,.1); color:#34c759; }
+.legend { display:flex; gap:12px; flex-wrap:wrap; padding:12px 0; font-size:12px; color:var(--text2); }
+.legend-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="content">
+<h1>银座逛街地图</h1>
+<p class="sub">D4 下午 · 14:00-18:30 · 银座→大黑PA</p>
+
+<div class="shop">
+<div class="name">Bic Camera 有楽町</div>
+<div class="addr">東京都千代田区有楽町1-11-1 · 銀座駅C4出口步行3分</div>
+<div class="desc">买GR IIIx/X100VI现货碰运气 · 拍立得相纸(Instax)种类最多 · 富士胶片(Fuji 35mm) · 免税 + 优惠券5%</div>
+<span class="tag cam">相机</span>
+</div>
+
+<div class="shop">
+<div class="name">agete 银座本店</div>
+<div class="addr">東京都中央区銀座3-2-1 マロニエゲート2F · 銀座駅A13出口步行2分</div>
+<div class="desc">日本轻奢珠宝 · K10/K18金 · 珍珠 · 戒指¥15,000-50,000 · 免税</div>
+<span class="tag jwl">珠宝</span>
+</div>
+
+<div class="shop">
+<div class="name">Le Labo 银座</div>
+<div class="addr">東京都中央区銀座6-10-1 GINZA SIX B1F · 銀座駅A3出口直连</div>
+<div class="desc">纽约手工香水 · Santal 33/The Noir 29 · 银座限定东京城市香 · 50ml ¥25,000-35,000</div>
+<span class="tag perf">香水</span>
+</div>
+
+<div class="shop">
+<div class="name">UNIQLO 银座旗舰店</div>
+<div class="addr">東京都中央区銀座6-9-5 · 銀座駅A2出口步行1分</div>
+<div class="desc">12层旗舰 · 日本限定款 · UT系列 · 免税 · 比国内便宜20-30%</div>
+<span class="tag fash">穿搭</span>
+</div>
+
+<div class="shop">
+<div class="name">MUJI 无印良品 银座</div>
+<div class="addr">東京都中央区銀座3-3-5 · 銀座一丁目駅步行2分</div>
+<div class="desc">世界旗舰店 · B1 MUJI Diner · 银座限定商品 · 收纳/文具/零食 · 免税</div>
+<span class="tag fash">生活</span>
+</div>
+
+<div class="shop">
+<div class="name">GU 银座</div>
+<div class="addr">東京都中央区銀座5-7-7 · 銀座駅A4出口步行1分</div>
+<div class="desc">优衣库副线 · 比优衣库便宜30-50% · 基础款T恤¥990起 · 免税</div>
+<span class="tag fash">穿搭</span>
+</div>
+
+<div class="shop">
+<div class="name">Ginza Loft</div>
+<div class="addr">東京都中央区銀座2-4-6 銀座ベルビア館3-6F · 銀座一丁目駅步行3分</div>
+<div class="desc">6层杂货天堂 · 文具/美妆/旅行用品/日本设计 · 银座限定 · 免税</div>
+<span class="tag fash">杂货</span>
+</div>
+
+<div class="legend">
+<span><span class="legend-dot" style="background:#007aff"></span> 相机</span>
+<span><span class="legend-dot" style="background:#ff9500"></span> 珠宝</span>
+<span><span class="legend-dot" style="background:#af52de"></span> 香水</span>
+<span><span class="legend-dot" style="background:#34c759"></span> 穿搭/杂货</span>
+</div>
+</div>
+
+<script>
+const shops = [
+  { name:'Bic Camera 有楽町', lat:35.6735, lng:139.7625, type:'cam', desc:'相机·拍立得·胶片', time:'14:00' },
+  { name:'agete 银座本店', lat:35.6720, lng:139.7655, type:'jwl', desc:'日本轻奢珠宝', time:'14:30' },
+  { name:'Le Labo 银座', lat:35.6695, lng:139.7640, type:'perf', desc:'GINZA SIX B1F', time:'15:00' },
+  { name:'UNIQLO 银座', lat:35.6690, lng:139.7645, type:'fash', desc:'12层旗舰', time:'15:20' },
+  { name:'MUJI 银座', lat:35.6725, lng:139.7670, type:'fash', desc:'世界旗舰店', time:'16:00' },
+  { name:'GU 银座', lat:35.6710, lng:139.7660, type:'fash', desc:'优衣库副线', time:'16:40' },
+  { name:'Ginza Loft', lat:35.6735, lng:139.7680, type:'fash', desc:'杂货天堂', time:'17:10' },
+];
+
+const map = L.map('map', { center:[35.6715,139.765], zoom:15, zoomControl:false });
+L.control.zoom({ position:'topright' }).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom:19 }).addTo(map);
+
+const cols = { cam:'#007aff', jwl:'#ff9500', perf:'#af52de', fash:'#34c759' };
+const emoji = { cam:'C', jwl:'J', perf:'P', fash:'S' };
+
+let coords = [];
+shops.forEach(s => {
+  const m = L.marker([s.lat, s.lng], {
+    icon: L.divIcon({ className:'', html:'<div style="width:28px;height:28px;border-radius:50%;background:'+cols[s.type]+';border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18)">'+emoji[s.type]+'</div>', iconSize:[28,28], iconAnchor:[14,14], popupAnchor:[0,-16] })
+  }).addTo(map);
+  m.bindPopup('<b>'+s.name+'</b><br><span style="color:#86868b">'+s.desc+'</span>');
+  coords.push([s.lat, s.lng]);
+});
+if(coords.length) map.fitBounds(coords, { padding:[30,30] });
+</script>
+</body>
+</html>
